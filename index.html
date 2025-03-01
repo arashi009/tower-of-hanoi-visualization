@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tower of Hanoi Visualization</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Tower of Hanoi Visualization</h1>
+            <p class="subtitle">A visual demonstration of the recursive algorithm</p>
+        </header>
+        
+        <div class="controls-panel">
+            <div class="input-section">
+                <div class="control-group">
+                    <label for="disk-count">Number of Disks:</label>
+                    <div class="number-input">
+                        <button class="decrement">-</button>
+                        <input type="number" id="disk-count" min="1" max="8" value="3">
+                        <button class="increment">+</button>
+                    </div>
+                </div>
+                
+                <div class="button-group">
+                    <button id="start-btn" class="primary-btn"><i class="fas fa-play"></i> Start</button>
+                    <button id="pause-btn" class="secondary-btn" disabled><i class="fas fa-pause"></i> Pause</button>
+                    <button id="step-btn" class="info-btn" disabled><i class="fas fa-step-forward"></i> Step</button>
+                    <button id="reset-btn" class="danger-btn"><i class="fas fa-redo"></i> Reset</button>
+                </div>
+                
+                <div class="speed-control">
+                    <label for="speed-slider">Speed: <span id="speed-value">Medium</span></label>
+                    <input type="range" id="speed-slider" min="1" max="10" value="5">
+                </div>
+            </div>
+            
+            <div class="mode-selector">
+                <label>Mode:</label>
+                <div class="mode-options">
+                    <label class="mode-option">
+                        <input type="radio" name="mode" value="auto" checked>
+                        <span>Auto-solve</span>
+                    </label>
+                    <label class="mode-option">
+                        <input type="radio" name="mode" value="step">
+                        <span>Step-by-step</span>
+                    </label>
+                    <label class="mode-option">
+                        <input type="radio" name="mode" value="manual">
+                        <span>Manual</span>
+                    </label>
+                </div>
+            </div>
+            
+            <div class="stats-panel">
+                <div class="stat">
+                    <span class="stat-label">Total Moves:</span>
+                    <span id="total-moves" class="stat-value">0</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Current Move:</span>
+                    <span id="current-move" class="stat-value">0</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Time:</span>
+                    <span id="elapsed-time" class="stat-value">00:00</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Minimum Moves:</span>
+                    <span id="min-moves" class="stat-value">7</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <div class="visualization-container">
+                <div class="visualization">
+                    <div class="towers-container">
+                        <div class="tower" id="tower-a">
+                            <div class="pole"></div>
+                            <div class="base"></div>
+                        </div>
+                        <div class="tower" id="tower-b">
+                            <div class="pole"></div>
+                            <div class="base"></div>
+                        </div>
+                        <div class="tower" id="tower-c">
+                            <div class="pole"></div>
+                            <div class="base"></div>
+                        </div>
+                    </div>
+                    <div class="labels">
+                        <div class="label">Source (A)</div>
+                        <div class="label">Auxiliary (B)</div>
+                        <div class="label">Destination (C)</div>
+                    </div>
+                </div>
+                
+                <div class="manual-controls">
+                    <p>Select a disk and then click on the destination tower</p>
+                    <div class="move-counter">
+                        <span>Your Moves: </span>
+                        <span id="user-moves">0</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="algorithm-section">
+                <div class="section-header">
+                    <h2>Algorithm Visualization</h2>
+                    <div class="toggle-btn" id="toggle-algorithm">
+                        <i class="fas fa-chevron-up"></i>
+                    </div>
+                </div>
+                <div class="algorithm-content">
+                    <div class="algorithm-explanation">
+                        <p>The Tower of Hanoi is solved using a recursive algorithm that follows these steps:</p>
+                    </div>
+                    <div class="algorithm-code">
+HanoiTowers(int n, char S, char temp, char D):
+    if n = 1 then 
+        print("move disk from %c to %c\n", S, D)
+    else
+        HanoiTowers(n-1, S, D, temp)
+        print("move disk from %c to %c", S, D)
+        HanoiTowers(n-1, temp, S, D)
+                    </div>
+                    <div class="recursion-tree" id="recursion-tree">
+                        <h3>Recursion Tree:</h3>
+                        <div class="tree-container"></div>
+                    </div>
+                    <div class="steps-container">
+                        <h3>Execution Steps:</h3>
+                        <div id="steps-log"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="info-section">
+            <div class="section-header">
+                <h2>About Tower of Hanoi</h2>
+                <div class="toggle-btn" id="toggle-info">
+                    <i class="fas fa-chevron-up"></i>
+                </div>
+            </div>
+            <div class="info-content">
+                <p>The Tower of Hanoi is a mathematical puzzle consisting of three rods and a number of disks of different sizes. The puzzle starts with the disks stacked on one rod in order of decreasing size, with the smallest at the top.</p>
+                <p>The objective is to move the entire stack to another rod, following these rules:</p>
+                <ol>
+                    <li>Only one disk can be moved at a time.</li>
+                    <li>Each move consists of taking the upper disk from one of the stacks and placing it on top of another stack or on an empty rod.</li>
+                    <li>No disk may be placed on top of a smaller disk.</li>
+                </ol>
+                <p>The minimum number of moves required to solve a Tower of Hanoi puzzle is 2<sup>n</sup> - 1, where n is the number of disks.</p>
+                <div class="complexity-info">
+                    <h3>Time Complexity</h3>
+                    <p>The time complexity of the Tower of Hanoi algorithm is O(2<sup>n</sup>), where n is the number of disks.</p>
+                    <h3>Space Complexity</h3>
+                    <p>The space complexity is O(n) due to the recursion stack.</p>
+                </div>
+                <div class="fun-facts">
+                    <h3>Fun Facts</h3>
+                    <ul>
+                        <li>With 64 disks, it would take 2<sup>64</sup>-1 moves, which is over 18 quintillion moves!</li>
+                        <li>If you could move one disk per second, it would take over 584 billion years to complete.</li>
+                        <li>The puzzle was invented by the French mathematician Édouard Lucas in 1883.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Created for educational purposes | <button id="theme-toggle" class="theme-btn"><i class="fas fa-moon"></i> Dark Mode</button></p>
+        </footer>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html> 
